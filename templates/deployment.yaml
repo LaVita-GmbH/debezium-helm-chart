@@ -29,7 +29,7 @@ spec:
         emptyDir: {}
       - name: secrets
         secret:
-          secretName: {{ include "debezium.name" . }}
+          secretName: {{ include "debezium.name" . }}-properties
           defaultMode: 0744
       - name: config
         configMap:
@@ -50,12 +50,10 @@ spec:
         - name: config
           mountPath: /kafka/config/log4j.properties
           subPath: log4j.properties
-        - name: config
+        - name: secrets
           mountPath: /kafka/config/admin.properties
           subPath: admin.properties
         env:
-        - name: KAFKA_OPTS
-          value: -Djava.security.auth.login.config=/etc/kafka/jaas.conf
         - name: KAFKA_HEAP_OPTS
           value: -Xms256m -Xmx256m
         - name: KAFKA_LOG4J_OPTS
@@ -88,14 +86,14 @@ spec:
         - name: config
           mountPath: /kafka/config/log4j.properties
           subPath: log4j.properties
-        - name: config
+        - name: secrets
           mountPath: /kafka/config/connect-distributed.properties
           subPath: connect-distributed.properties
         - name: opt-prometheus
           mountPath: /opt/prometheus
         env:
         - name: KAFKA_OPTS
-          value: -Djava.security.auth.login.config=/etc/kafka/jaas.conf -javaagent:/opt/prometheus/jmx_exporter_javaagent.jar=9071:/etc/prometheus/jmx_exporter.yml
+          value: -javaagent:/opt/prometheus/jmx_exporter_javaagent.jar=9071:/etc/prometheus/jmx_exporter.yml
         - name: KAFKA_HEAP_OPTS
           value: {{ .Values.kafka_heap_opts }}
         - name: KAFKA_JVM_PERFORMANCE_OPTS

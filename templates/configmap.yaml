@@ -38,11 +38,6 @@ data:
         plugin: "$1"
         name: "$3"
         context: "$2"
-  admin.properties: |
-    security.protocol=SASL_SSL
-    sasl.mechanism=PLAIN
-    ssl.truststore.location=/etc/kafka/truststore.jks
-    ssl.truststore.password=123456
   kafka.sh: |
     #!/bin/sh
     set -e
@@ -77,46 +72,3 @@ data:
     --config retention.ms=259200000 \
     --config min.insync.replicas=2 \
     --if-not-exists --topic ${topic_prefix}.${topic}; done
-  connect-distributed.properties: |
-    group.id={{ .Values.debezium.properties.group_id }}
-
-    listeners=http://0.0.0.0:8083
-
-    task.shutdown.graceful.timeout.ms=10000
-
-    plugin.path=/kafka/connect
-
-    key.converter=org.apache.kafka.connect.json.JsonConverter
-    key.converter.schemas.enable=false
-    value.converter=org.apache.kafka.connect.json.JsonConverter
-    value.converter.schemas.enable=false
-    internal.key.converter=org.apache.kafka.connect.json.JsonConverter
-    internal.value.converter=org.apache.kafka.connect.json.JsonConverter
-
-    offset.storage.topic={{ .Values.debezium.properties.topics_basename }}.offset
-    offset.storage.replication.factor=1
-    offset.flush.interval.ms=60000
-    offset.flush.timeout.ms=5000
-
-    config.storage.topic={{ .Values.debezium.properties.topics_basename }}.config
-    config.storage.replication.factor=1
-
-    status.storage.topic={{ .Values.debezium.properties.topics_basename }}.status
-    status.storage.replication.factor=1
-
-    bootstrap.servers={{ .Values.kafka.bootstrap_servers }}
-
-    security.protocol=SASL_SSL
-    sasl.mechanism=PLAIN
-    ssl.truststore.location=/etc/kafka/truststore.jks
-    ssl.truststore.password=123456
-
-    producer.security.protocol=SASL_SSL
-    producer.sasl.mechanism=PLAIN
-    producer.ssl.truststore.location=/etc/kafka/truststore.jks
-    producer.ssl.truststore.password=123456
-
-    consumer.security.protocol=SASL_SSL
-    consumer.sasl.mechanism=PLAIN
-    consumer.ssl.truststore.location=/etc/kafka/truststore.jks
-    consumer.ssl.truststore.password=123456
