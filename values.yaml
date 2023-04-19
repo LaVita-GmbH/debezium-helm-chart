@@ -5,6 +5,8 @@ kafka_jvm_performance_opts: -server -XX:+UseG1GC -XX:MetaspaceSize=96m -XX:MaxGC
 debezium:
   image: debezium/connect:1.7.1.Final
   connector: {}
+  connect_properties:
+    producer_max_request_size: 1048576
 
 kafka:
   ssl_enabled: False
