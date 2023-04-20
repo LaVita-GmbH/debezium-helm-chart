@@ -111,8 +111,4 @@ spec:
             exec:
               command: ['/bin/sh', '-c', 'sleep 60; curl --request PUT --header "Accept:application/json" --header "Content-Type:application/json" "http://127.0.0.1:8083/connectors/{{ .Values.debezium.connector.name }}/config" --data "@/etc/debezium/connector.json"']
         resources:
-          requests:
-            cpu: 0.1
-            memory: 256Mi
-          limits:
-            cpu: 1
+          {{- toYaml .Values.debezium.resources | nindent 10 }}

@@ -5,6 +5,13 @@ kafka_jvm_performance_opts: -server -XX:+UseG1GC -XX:MetaspaceSize=96m -XX:MaxGC
 debezium:
   image: debezium/connect:1.7.1.Final
   connector: {}
+  resources:
+    limits:
+      cpu: 1
+      memory: 2Gi
+    requests:
+      cpu: 0.5
+      memory: 1Gi
   connect_properties:
     producer_max_request_size: 1048576
 
